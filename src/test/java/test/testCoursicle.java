@@ -59,10 +59,81 @@ public class testCoursicle {
     // purpose: page 1, test T1
     // input: click on "App"
     // expected: the "App" page will load in the browser
+    // Author: Jackson Miskill
     void testT1GetAppPage() {
         String expected = "https://www.coursicle.com/app/";
         driver.findElement(By.id("appNavItem")).click();
         assertEquals(expected, driver.getCurrentUrl());
     }
+
+    @Test
+    // purpose: page 1, Test T2
+    // input:
+    // expected:
+    // Author: Jackson Miskill
+    void testT2NoRealClickOccurs() {
+        String expected = "https://www.coursicle.com/";
+        driver.findElement(By.id("tileSearchBox")).click();
+        assertEquals(expected, driver.getCurrentUrl());
+    }
+
+    @Test
+    // purpose: page 1, test T3
+    // input: click on "Blog"
+    // expected: the blog page will load
+    // Author: Jackson Miskill
+    void testT3GetBlogPage() {
+        String expected = "https://www.coursicle.com/blog/";
+        driver.findElement(By.id("blogNavItem")).click();
+        assertEquals(expected, driver.getCurrentUrl());
+    }
+
+    @Test
+    // purpose: page 1, Test T4
+    // input: click on "contact"
+    // expected: the contact page will load
+    // Author: Jackson Miskill
+    void testT4GetContactPage() {
+        driver.findElement(By.id("contactNavItem")).click();
+        assertTrue(driver.findElement(By.id("contactUsModal"))!= null);
+    }
+
+    @Test
+    // purpose: page 1, Test T5
+    // input: click on the "+" button
+    // expected:
+    // Author: Jackson Miskill
+    void testT5ClickPlusButton() {
+        driver.findElement(By.className("moreTile")).click();
+        assertTrue(driver.getPageSource().contains("Purdue"));
+    }
+
+    @Test
+    // purpose: page 1, Test T6
+    // input: click on "W&M"
+    // expected: page reloads as the W&M page
+    void testT6ClickOnRandomSchool() {
+        String expected = "https://www.coursicle.com/wm/";
+        driver.findElement(By.xpath("//a[@displayname='W&M']")).click();
+        assertEquals(expected, driver.getCurrentUrl());
+    }
+
+    @Test
+    // purpose: page 1, Test T7
+    // input: type in "University of Virginia
+    // expected: University of Virginia becomes unhidden
+    void testT7SendUniversityName() {
+        String toSend = "University of Virginia";
+        String expected = "tileElement showTile";
+        WebElement we1 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
+        assertEquals("tileElement", we1.getAttribute("class")); // first, check it is hidden
+        driver.findElement(By.id("tileSearchBoxInput")).sendKeys("University of Virginia");
+        WebElement we2 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
+        assertEquals(expected, we2.getAttribute("class"));
+    }
+
+
+
+
 
 }
