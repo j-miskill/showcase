@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="test.testCoursicle" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-11-26T16:30:56" hostname="Jacksons-MacBook-Pro-2.local" time="10.449">
+<testsuite name="test.testCoursicle" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-11-26T18:05:11" hostname="Jacksons-MacBook-Pro-2.local" time="12.355">
   <properties/>
-  <testcase name="testT3RequestForEmptyString()" classname="test.testCoursicle" time="10.449"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[Nov 26, 2023 11:30:56 AM org.openqa.selenium.manager.SeleniumManager lambda$runCommand$1
+  <testcase name="testT18ClickTheExportButton()" classname="test.testCoursicle" time="12.355"/>
+  <system-out><![CDATA[display: block;
+]]></system-out>
+  <system-err><![CDATA[Nov 26, 2023 1:05:12 PM org.openqa.selenium.manager.SeleniumManager lambda$runCommand$1
 INFO: Driver path: /Users/jacksonmiskill/.cache/selenium/geckodriver/mac64/0.33.0/geckodriver
-Nov 26, 2023 11:30:56 AM org.openqa.selenium.manager.SeleniumManager lambda$runCommand$1
+Nov 26, 2023 1:05:12 PM org.openqa.selenium.manager.SeleniumManager lambda$runCommand$1
 INFO: Browser path: /Applications/Firefox.app/Contents/MacOS/firefox
 ]]></system-err>
 </testsuite>

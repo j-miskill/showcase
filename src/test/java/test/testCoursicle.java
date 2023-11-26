@@ -1,5 +1,6 @@
 package test;
 
+import jdk.jshell.spi.ExecutionControl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
+
+import java.io.*;
 
 public class testCoursicle {
     private WebDriver driver;
@@ -255,7 +258,6 @@ public class testCoursicle {
         TimeUnit.SECONDS.sleep(2);
         assertTrue(driver.getPageSource().contains("No classes found."));
     }
-
     @Test
     // purpose: page 2: test T3
     // input: null
@@ -274,5 +276,223 @@ public class testCoursicle {
     // input: "CS 4710
     // expected: Artificial Intelligence class will load on the left hand side
     // Author: Jackson Miskill
-}
+    void testT4RequestForOffcialNameExists() throws InterruptedException{
+        page2SetUp();
+        String toSend = "CS 4710";
+        assertFalse(driver.getPageSource().contains("Artificial Intelligence"));
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        assertTrue(driver.getPageSource().contains("Artificial Intelligence"));
+    }
 
+    @Test
+    // purpose: page 2, test T5
+    // input: "COOK 1010"
+    // expected: "No classes found"
+    // Author: Jackson Miskill
+    void testT5RequestForOfficialNameNonexistent() throws InterruptedException{
+        page2SetUp();
+        String toSend = "COOK 1010";
+        assertFalse(driver.getPageSource().contains("No classes found."));
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        assertTrue(driver.getPageSource().contains("No classes found."));
+    }
+
+    @Test
+    // purpose: page 2, test T6
+    // input: "CS > 4000"
+    // expected: all UVA CS classes greater than the 4000 level
+    // Author: Jackson Miskill
+    void testT6TestRequestGreaterThan () throws InterruptedException{
+        page2SetUp();
+        String toSend = "CS > 4000";
+        assertFalse(driver.getPageSource().contains("CS 4710")); // simple check to make sure no class is available at this moment
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        assertTrue(driver.getPageSource().contains("CS 4710") && driver.getPageSource().contains("CS 4414"));
+    }
+
+    @Test
+    // purpose: page 2, test T7
+    // input: "CS < 4000"
+    // expected: all UVA CS classes less than the 4000 level
+    // Author Jackson Miskill\
+    // Note: this test fails --> I'm keeping it that way. They have not implemented this functionality
+    void testT7TestRequestLessThan() {
+        page2SetUp();
+        String toSend = "CS < 4000";
+        assertFalse(driver.getPageSource().contains("CS 3100"));  // a single class that is under the 4000 level
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        assertTrue(driver.getPageSource().contains("CS 3100"));
+    }
+
+    @Test
+    // purpose: page 2, test T8
+    // input: "CS == 3100"
+    // expected: all UVA CS classes equal to 3100
+    // Author: Jackson Miskill
+    // Note: this one also fails because this functionality has not been implemented
+    void testT8RequestEqualTo() throws InterruptedException{
+        page2SetUp();
+        String toSend = "CS == 3100";
+        assertFalse(driver.getPageSource().contains("CS 3100"));
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        assertTrue(driver.getPageSource().contains("CS 3100"));
+    }
+
+    @Test
+    // purpose: page 2, test T9
+    // input: "4710"
+    // expected: CS 4710 pulls up to the side
+    // Author: Jackson Miskill
+    void testT9RequestBasedOnExistantNumericalID() throws InterruptedException{
+        page2SetUp();
+        String toSend = "4710";
+        assertFalse(driver.getPageSource().contains("Artificial Intelligence"));
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        assertTrue(driver.getPageSource().contains("Artificial Intelligence"));
+    }
+
+    @Test
+    // purpose: page 2, test T10
+    // input: "7777"
+    // expected: "No classes found."
+    // Author: Jackson Miskill
+    void testT10RequestBasedOnNonexistantNumericalID() throws InterruptedException {
+        page2SetUp();
+        String toSend = "7777";
+        assertFalse(driver.getPageSource().contains("7777"));
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        assertTrue(driver.getPageSource().contains("No classes found."));
+    }
+
+    @Test
+    // purpose: page 2, test T11
+    // input: click on one class (to see if we can add it to the scheduler)
+    // expected: the class registers into the schedulers
+    // Author:
+    void testT11ClickOnClassToAdd() throws InterruptedException{
+        page2SetUp();
+        String toSend = "CS 4710";
+        assertFalse(driver.getPageSource().contains("Artificial Intelligence"));
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.className("quickSearchClass")).click();
+        TimeUnit.SECONDS.sleep(2);
+        // System.out.println(driver.findElement(By.id("tuesdayColumn")).getText());
+        assertTrue(driver.findElement(By.id("tuesdayColumn")).getText().contains("CS 4710-001"));
+    }
+
+    @Test
+    // purpose: page 2, test T12
+    // input: a click conducted on one of the x-buttons that is associated with a block element in the scheduler
+    // expected: that block element wll be removed
+    // Author: Jackson Miskill
+    // Note: this test fails because it's impossible to reach these points in the HTML
+    void testT12ClickOnAnX() throws InterruptedException{
+        page2SetUp();
+        String toSend = "CS 4710";
+        assertFalse(driver.getPageSource().contains("Artificial Intelligence"));
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.className("quickSearchClass")).click();
+        TimeUnit.SECONDS.sleep(2);
+        // System.out.println(driver.findElement(By.id("tuesdayColumn")).getText());
+        assertTrue(driver.findElement(By.id("tuesdayColumn")).getText().contains("CS 4710-001"));
+        driver.findElement(By.className("quickSearchAlreadyAdded")).click();
+        assertFalse(driver.findElement(By.id("tuesdayColumn")).getText().contains("CS 4710-001"));
+    }
+
+    @Test
+    // purpose: page 2, test T13
+    // input: click on the "+" icon
+    // expected: there will be a new schedule created called "New Schedule"
+    // Author: Jackson Miskill
+    void testT13ClickNewScheduleOption() throws InterruptedException{
+        page2SetUp();
+        String expected = "This is a new schedule";
+        driver.findElement(By.id("editScheduleOptionCreate")).click();
+        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.className("scheduleTitle")).sendKeys("This is a new schedule");
+        // System.out.println(driver.findElement(By.className("scheduleTitleBlock")).getText());
+        assertEquals(expected, driver.findElement(By.className("scheduleTitleBlock")).getText());
+    }
+
+    @Test
+    // purpose: page 2, test T14
+    // input: a numerical input for the new schedule, instead of a string
+    // expected: the value to be accepted
+    // Author: Jackson Miskill
+    void testT14Test() throws InterruptedException{
+        page2SetUp();
+        String expected = "9031248901";
+        driver.findElement(By.id("editScheduleOptionCreate")).click();
+        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.className("scheduleTitle")).sendKeys("9031248901");
+        // System.out.println(driver.findElement(By.className("scheduleTitleBlock")).getText());
+        assertEquals(expected, driver.findElement(By.className("scheduleTitleBlock")).getText());
+    }
+
+    @Test
+    // purpose: page 2, test T15
+    // input: rename button clicked
+    // expected: can rename the current schedule
+    // Author: Jackson Miskill
+    void testT15RenameASchedule() throws InterruptedException{
+        page2SetUp();
+        String expected = "This is a new schedule";
+        driver.findElement(By.id("editScheduleOptionRename")).click();
+        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.className("scheduleTitle")).sendKeys("This is a new schedule");
+        // System.out.println(driver.findElement(By.className("scheduleTitleBlock")).getText());
+        assertEquals(expected, driver.findElement(By.className("scheduleTitleBlock")).getText());
+    }
+
+    @Test
+    // purpose: page 2, test T16
+    // input: rename button clicked and numerical value added
+    // expected: can rename the current schedule
+    // Author: Jackson Miskill
+    void testT16RenameAScheduleWithInteger() throws InterruptedException{
+        page2SetUp();
+        String expected = "123456789";
+        driver.findElement(By.id("editScheduleOptionRename")).click();
+        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.className("scheduleTitle")).sendKeys("123456789");
+        // System.out.println(driver.findElement(By.className("scheduleTitleBlock")).getText());
+        assertEquals(expected, driver.findElement(By.className("scheduleTitleBlock")).getText());
+    }
+
+    @Test
+    // purpose: page 2, test T17
+    // input: duplicate button can be clicked
+    // expected: another schedule is created
+    // Author: Jackson Miskill
+    void testT17DuplicateASchedule() throws InterruptedException{
+        page2SetUp();
+        String expected = "Spring 2024 copy";
+        driver.findElement(By.id("editScheduleOptionDuplicate")).click();
+        TimeUnit.SECONDS.sleep(2);
+        // System.out.println(driver.findElement(By.className("scheduleTitleBlock")).getText());
+        assertEquals(expected, driver.findElement(By.className("scheduleTitleBlock")).getText());
+    }
+
+    @Test
+    // purpose: page 2, test T18
+    // input: click the export schedule
+    // expected: the export window pops up
+    // Author: Jackson Miskill
+    void testT18ClickTheExportButton() throws InterruptedException{
+        page2SetUp();
+        driver.findElement(By.id("editScheduleOptionExportSchedule")).click();
+        TimeUnit.SECONDS.sleep(2);
+        System.out.println(driver.findElement(By.id("exportScheduleModal")).getAttribute("style"));
+        assertTrue(driver.findElement(By.id("exportScheduleModal")).getAttribute("style").contains("display: block"));
+        driver.findElement(By.id("editScheduleOptionCalendar")).click();
+        assertTrue(driver.findElement(By.id("exportToCalendarModal")).getAttribute("style").contains("display: block"));
+    }
+}
