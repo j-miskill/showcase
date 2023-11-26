@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="test.testCoursicle" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-11-26T02:59:23" hostname="Jacksons-MacBook-Pro-2.local" time="9.702">
+<testsuite name="test.testCoursicle" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-11-26T03:12:58" hostname="Jacksons-MacBook-Pro-2.local" time="8.018">
   <properties/>
-  <testcase name="testT7SendUniversityName()" classname="test.testCoursicle" time="9.702"/>
-  <system-out><![CDATA[hErERhERhEhREHrHERhErHErhEhr!!!!!!!!........------
-background: rgb(243, 111, 33); position: absolute; left: 10px; top: 0px;
-]]></system-out>
-  <system-err><![CDATA[Nov 25, 2023 9:59:24 PM org.openqa.selenium.manager.SeleniumManager lambda$runCommand$1
+  <testcase name="testT12SendDoesNotExistUniversityShortenedName()" classname="test.testCoursicle" time="8.018"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Nov 25, 2023 10:12:59 PM org.openqa.selenium.manager.SeleniumManager lambda$runCommand$1
 INFO: Driver path: /Users/jacksonmiskill/.cache/selenium/geckodriver/mac64/0.33.0/geckodriver
-Nov 25, 2023 9:59:24 PM org.openqa.selenium.manager.SeleniumManager lambda$runCommand$1
+Nov 25, 2023 10:12:59 PM org.openqa.selenium.manager.SeleniumManager lambda$runCommand$1
 INFO: Browser path: /Applications/Firefox.app/Contents/MacOS/firefox
 ]]></system-err>
 </testsuite>

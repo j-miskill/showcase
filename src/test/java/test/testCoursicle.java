@@ -129,7 +129,7 @@ public class testCoursicle {
         String expected = "tileElement showTile";
         WebElement we1 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
         assertEquals("tileElement", we1.getAttribute("class")); // first, check it is hidden
-        driver.findElement(By.id("tileSearchBoxInput")).sendKeys("University of Virginia");
+        driver.findElement(By.id("tileSearchBoxInput")).sendKeys(toSend);
         TimeUnit.SECONDS.sleep(2); // had to throw a pause because the Javascript doesn't load that fast
         WebElement we2 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
         System.out.println("hErERhERhEhREHrHERhErHErhEhr!!!!!!!!........------");
@@ -137,5 +137,59 @@ public class testCoursicle {
         assertTrue(we2.getAttribute("style").contains("left") && we2.getAttribute("style").contains("top"));
     }
 
+    @Test
+    // purpose: page 1, Test T8
+    // input: type in "Evergreen"- this is a university that does not exist in their database
+    // expected: "We haven't added support for your college yet but you can use our schedule maker"
+    void testT8SendDoesNotExistUniversityName() {
+        String toSend = "Evergreen";
+        driver.findElement(By.id("tileSearchBoxInput")).sendKeys(toSend);
+        assertTrue(driver.getPageSource().contains("We haven't added support for your college yet"));
+    }
 
+    @Test
+    // purpose: page 1, Test T9
+    // input: null
+    // expected: "We haven't added support for your college yet but you can use our schedule maker" or no change
+    void testT9SendNullValue() {
+        driver.findElement(By.id("tileSearchBoxInput")).sendKeys("");
+        assertTrue(driver.getPageSource().contains("We haven't added support for your college yet"));
+    }
+
+    @Test
+    // purpose: page 1, Test T10
+    // input: 7777
+    // expected: We haven't added support for your college yet
+    void testT10SendDoesNotExistUniversityNumber() {
+        String toSend = "7777";
+        driver.findElement(By.id("tileSearchBoxInput")).sendKeys(toSend);
+        assertTrue(driver.getPageSource().contains("We haven't added support for your college yet"));
+    }
+
+    @Test
+    // purpose: page 1, Test T11
+    // input: "UVA"
+    // expected:  UVA box will pull up
+    void testT11SendUniversityShortName() throws InterruptedException {
+        String toSend = "UVA";
+        String expected = "tileElement showTile";
+        WebElement we1 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
+        assertEquals("tileElement", we1.getAttribute("class")); // first, check it is hidden
+        driver.findElement(By.id("tileSearchBoxInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2); // had to throw a pause because the Javascript doesn't load that fast
+        WebElement we2 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
+        System.out.println(we2.getAttribute("style"));
+        assertTrue(we2.getAttribute("style").contains("left") && we2.getAttribute("style").contains("top"));
+    }
+
+    @Test
+    // purpose: page 1, test T12
+    // input: "EG"
+    // We haven't added support for your college yet
+    void testT12SendDoesNotExistUniversityShortenedName() {
+        String toSend = "EGU";
+        driver.findElement(By.id("tileSearchBoxInput")).sendKeys(toSend);
+        assertTrue(driver.getPageSource().contains("We haven't added support for your college yet"));
+    }
 }
+
