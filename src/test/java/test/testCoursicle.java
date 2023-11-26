@@ -231,12 +231,48 @@ public class testCoursicle {
     // input: "Artificial Intelligence"
     // expected: The 4710 class pulls up on the left hand side of the page
     // Author: Jackson Miskill
-    void testT1NormalClassFullName() {
+    void testT1NormalClassFullName() throws InterruptedException {
         page2SetUp(); // needed to add a method to go to the next page because the @BeforeEach only sends to home
         // assertTrue(driver.getPageSource().contains("Artificial Intelligence")); --> returns false so it's not there originally, it pulls in
         String toSend = "Artificial Intelligence";
+        assertFalse(driver.getPageSource().contains("Artificial Intelligence"));
+        System.out.println("Got through first test");
         driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
-
+        TimeUnit.SECONDS.sleep(2); // had to throw a pause because the Javascript doesn't load that fast
+        assertTrue(driver.getPageSource().contains("Artificial Intelligence"));
     }
+
+    @Test
+    // purpose: page 2, test T2
+    // input: "Introduction to Cooking"
+    // expected: "No classes found."
+    // Author: Jackson Miskill
+    void testT2RequestForNonexistentClassByFullName() throws InterruptedException{
+        page2SetUp();
+        String toSend = "Introduction to Cooking";
+        assertFalse(driver.getPageSource().contains("No classes found."));
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        assertTrue(driver.getPageSource().contains("No classes found."));
+    }
+
+    @Test
+    // purpose: page 2: test T3
+    // input: null
+    // expected: "No classes found." or no changes in the system state
+    void testT3RequestForEmptyString() throws InterruptedException {
+        page2SetUp();
+        String toSend = "";
+        assertFalse(driver.getPageSource().contains("No classes found."));
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+        TimeUnit.SECONDS.sleep(2);
+        assertTrue(driver.getPageSource().contains("Search: bio > 300, math"));
+    }
+
+    @Test
+    // purpose: page 2, test T4
+    // input: "CS 4710
+    // expected: Artificial Intelligence class will load on the left hand side
+    // Author: Jackson Miskill
 }
 
