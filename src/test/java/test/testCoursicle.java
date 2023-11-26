@@ -2,6 +2,7 @@ package test;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,24 +17,36 @@ public class testCoursicle {
     private WebElement element;
     private String url = "https://www.coursicle.com/";
 
-
-    @BeforeEach
-    void setup() {
+    // Purpose: Page 1 set up
+    // Author: Jackson Miskill
+    void page1SetUp() {
         driver = new FirefoxDriver();
         driver.get(url);
     }
 
+    // purpose: Page 2 set up
+    // Author: Jackson Miskill- Page 2 set up
+    void page2SetUp() {
+        driver = new FirefoxDriver();
+        driver.get("https://www.coursicle.com/virginia");
+    }
+
     @AfterEach
+    // Author: Jackson Miskill
     void tearDown() {
         driver.quit();
     }
+
+    // Author: Jackson Miskill
+
 
     @Test
     // purpose: ensure that we can get the base url of this website
     // input: simply the url to the page
     // expected: the title should be that "Coursicle | ..." string below
+    // Author: Jackson Miskill
     void testSetup() {
-
+        page1SetUp();
         String expected = "Coursicle | Plan your schedule and get into classes";
         String actual = driver.getTitle();
         assertEquals(expected, actual);
@@ -44,6 +57,7 @@ public class testCoursicle {
     // input: "UVA" string
     // expected: UVA displays on the page
     void testGetSchoolByAc() {
+        page1SetUp();
         driver.findElement(By.id("tileSearchBoxInput")).sendKeys("UVA");
         assertTrue(driver.getPageSource().contains("UVA"));
     }
@@ -53,6 +67,7 @@ public class testCoursicle {
     // input: "Virginia" string
     // expected: the page renders the UVA block to the screen
     void testGetSchoolByStateName() {
+        page1SetUp();
         driver.findElement(By.id("tileSearchBoxInput")).sendKeys("Virginia");
         assertTrue(driver.getPageSource().contains("UVA"));
     }
@@ -63,6 +78,7 @@ public class testCoursicle {
     // expected: the "App" page will load in the browser
     // Author: Jackson Miskill
     void testT1GetAppPage() {
+        page1SetUp();
         String expected = "https://www.coursicle.com/app/";
         driver.findElement(By.id("appNavItem")).click();
         assertEquals(expected, driver.getCurrentUrl());
@@ -74,6 +90,7 @@ public class testCoursicle {
     // expected:
     // Author: Jackson Miskill
     void testT2NoRealClickOccurs() {
+        page1SetUp();
         String expected = "https://www.coursicle.com/";
         driver.findElement(By.id("tileSearchBox")).click();
         assertEquals(expected, driver.getCurrentUrl());
@@ -85,6 +102,7 @@ public class testCoursicle {
     // expected: the blog page will load
     // Author: Jackson Miskill
     void testT3GetBlogPage() {
+        page1SetUp();
         String expected = "https://www.coursicle.com/blog/";
         driver.findElement(By.id("blogNavItem")).click();
         assertEquals(expected, driver.getCurrentUrl());
@@ -96,6 +114,7 @@ public class testCoursicle {
     // expected: the contact page will load
     // Author: Jackson Miskill
     void testT4GetContactPage() {
+        page1SetUp();
         driver.findElement(By.id("contactNavItem")).click();
         assertTrue(driver.findElement(By.id("contactUsModal"))!= null);
     }
@@ -106,6 +125,7 @@ public class testCoursicle {
     // expected:
     // Author: Jackson Miskill
     void testT5ClickPlusButton() {
+        page1SetUp();
         driver.findElement(By.className("moreTile")).click();
         assertTrue(driver.getPageSource().contains("Purdue"));
     }
@@ -114,7 +134,9 @@ public class testCoursicle {
     // purpose: page 1, Test T6
     // input: click on "W&M"
     // expected: page reloads as the W&M page
+    // Author: Jackson Miskill
     void testT6ClickOnRandomSchool() {
+        page1SetUp();
         String expected = "https://www.coursicle.com/wm/";
         driver.findElement(By.xpath("//a[@displayname='W&M']")).click();
         assertEquals(expected, driver.getCurrentUrl());
@@ -124,7 +146,9 @@ public class testCoursicle {
     // purpose: page 1, Test T7
     // input: type in "University of Virginia
     // expected: University of Virginia becomes unhidden
+    // Author: Jackson Miskill
     void testT7SendUniversityName() throws InterruptedException {
+        page1SetUp();
         String toSend = "University of Virginia";
         String expected = "tileElement showTile";
         WebElement we1 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
@@ -141,7 +165,9 @@ public class testCoursicle {
     // purpose: page 1, Test T8
     // input: type in "Evergreen"- this is a university that does not exist in their database
     // expected: "We haven't added support for your college yet but you can use our schedule maker"
+    // Author: Jackson Miskill
     void testT8SendDoesNotExistUniversityName() {
+        page1SetUp();
         String toSend = "Evergreen";
         driver.findElement(By.id("tileSearchBoxInput")).sendKeys(toSend);
         assertTrue(driver.getPageSource().contains("We haven't added support for your college yet"));
@@ -151,7 +177,9 @@ public class testCoursicle {
     // purpose: page 1, Test T9
     // input: null
     // expected: "We haven't added support for your college yet but you can use our schedule maker" or no change
+    // Author: Jackson Miskill
     void testT9SendNullValue() {
+        page1SetUp();
         driver.findElement(By.id("tileSearchBoxInput")).sendKeys("");
         assertTrue(driver.getPageSource().contains("We haven't added support for your college yet"));
     }
@@ -160,7 +188,9 @@ public class testCoursicle {
     // purpose: page 1, Test T10
     // input: 7777
     // expected: We haven't added support for your college yet
+    // Author: Jackson Miskill
     void testT10SendDoesNotExistUniversityNumber() {
+        page1SetUp();
         String toSend = "7777";
         driver.findElement(By.id("tileSearchBoxInput")).sendKeys(toSend);
         assertTrue(driver.getPageSource().contains("We haven't added support for your college yet"));
@@ -170,7 +200,9 @@ public class testCoursicle {
     // purpose: page 1, Test T11
     // input: "UVA"
     // expected:  UVA box will pull up
+    // Author: Jackson Miskill
     void testT11SendUniversityShortName() throws InterruptedException {
+        page1SetUp();
         String toSend = "UVA";
         String expected = "tileElement showTile";
         WebElement we1 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
@@ -186,10 +218,25 @@ public class testCoursicle {
     // purpose: page 1, test T12
     // input: "EG"
     // We haven't added support for your college yet
+    // Author: Jackson Miskill
     void testT12SendDoesNotExistUniversityShortenedName() {
+        page1SetUp();
         String toSend = "EGU";
         driver.findElement(By.id("tileSearchBoxInput")).sendKeys(toSend);
         assertTrue(driver.getPageSource().contains("We haven't added support for your college yet"));
+    }
+
+    @Test
+    // purpose: page 2, test T1
+    // input: "Artificial Intelligence"
+    // expected: The 4710 class pulls up on the left hand side of the page
+    // Author: Jackson Miskill
+    void testT1NormalClassFullName() {
+        page2SetUp(); // needed to add a method to go to the next page because the @BeforeEach only sends to home
+        // assertTrue(driver.getPageSource().contains("Artificial Intelligence")); --> returns false so it's not there originally, it pulls in
+        String toSend = "Artificial Intelligence";
+        driver.findElement(By.id("quickSearchInput")).sendKeys(toSend);
+
     }
 }
 
