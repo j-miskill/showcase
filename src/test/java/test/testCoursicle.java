@@ -55,4 +55,14 @@ public class testCoursicle {
         assertTrue(driver.getPageSource().contains("UVA"));
     }
 
+    @Test
+    // purpose: page 1, test T1
+    // input: click on "App"
+    // expected: the "App" page will load in the browser
+    void testT1GetAppPage() {
+        String expected = "https://www.coursicle.com/app/";
+        driver.findElement(By.id("appNavItem")).click();
+        assertEquals(expected, driver.getCurrentUrl());
+    }
+
 }
