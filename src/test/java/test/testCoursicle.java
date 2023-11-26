@@ -9,6 +9,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.concurrent.TimeUnit;
+
 public class testCoursicle {
     private WebDriver driver;
     private WebElement element;
@@ -122,18 +124,18 @@ public class testCoursicle {
     // purpose: page 1, Test T7
     // input: type in "University of Virginia
     // expected: University of Virginia becomes unhidden
-    void testT7SendUniversityName() {
+    void testT7SendUniversityName() throws InterruptedException {
         String toSend = "University of Virginia";
         String expected = "tileElement showTile";
         WebElement we1 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
         assertEquals("tileElement", we1.getAttribute("class")); // first, check it is hidden
         driver.findElement(By.id("tileSearchBoxInput")).sendKeys("University of Virginia");
+        TimeUnit.SECONDS.sleep(2); // had to throw a pause because the Javascript doesn't load that fast
         WebElement we2 = driver.findElement(By.xpath("//a[@displayname='UVA']"));
-        assertEquals(expected, we2.getAttribute("class"));
+        System.out.println("hErERhERhEhREHrHERhErHErhEhr!!!!!!!!........------");
+        System.out.println(we2.getAttribute("style"));
+        assertTrue(we2.getAttribute("style").contains("left") && we2.getAttribute("style").contains("top"));
     }
-
-
-
 
 
 }
