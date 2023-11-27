@@ -34,6 +34,13 @@ public class testCoursicle {
         driver.get("https://www.coursicle.com/virginia");
     }
 
+    // purpose: page setup for pages 3 and 4
+    // Author: Matthew Cahill
+    void pageBackHalfSetUp() {
+        driver = new FirefoxDriver();
+        driver.get("https://www.coursicle.com/virginia");
+    }
+
     @AfterEach
     // Author: Jackson Miskill
     void tearDown() {
@@ -494,5 +501,264 @@ public class testCoursicle {
         assertTrue(driver.findElement(By.id("exportScheduleModal")).getAttribute("style").contains("display: block"));
         driver.findElement(By.id("editScheduleOptionCalendar")).click();
         assertTrue(driver.findElement(By.id("exportToCalendarModal")).getAttribute("style").contains("display: block"));
+    }
+
+    @Test
+        // purpose: page 3, test T1
+        // input: clicking on specified class section
+        // expected: specified class section info is shown
+        // Author: Matthew Cahill
+    void testT1p3() { // ensures you are able to select the specified/searched class section
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        driver.findElement(By.id("searchBox")).click();
+        String search_section = "CS 3250";
+        driver.findElement(By.id("searchBox")).sendKeys(search_section);
+        driver.findElement(By.className("wrapForToolTip")).click();
+        assertTrue(driver.getPageSource().contains("CS 3250"));
+    }
+
+    @Test
+        // purpose: page 3, test T2
+        // input: null class section input
+        // expected: null input should not show an actual class section
+        // Author: Matthew Cahill
+    void testT2p3() { // ensures null input returns no actual class section
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        driver.findElement(By.id("searchBox")).click();
+        String search_section = "";
+        driver.findElement(By.id("searchBox")).sendKeys(search_section);
+        driver.findElement(By.className("wrapForToolTip")).click();
+        assertFalse(driver.getPageSource().contains("CS 3250"));
+    }
+
+    @Test
+        // purpose: page 3, test T3
+        // input: user clicks on the bar to select a meeting day for a class
+        // expected: user should be able to see the potential meeting days they can select from a drop-down menu that is provided
+        // Author: Matthew Cahill
+    void testT3p3() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        driver.findElement(By.className("chzn-choices")).click();
+        assertTrue(driver.getPageSource().contains("Tue"));
+    }
+
+    @Test
+        // purpose: page 3, test T4
+        // input: user clicks on "starts after" option
+        // expected: user should be able to see the potential selection options for "starts after" meeting times for any class available
+        // Author: Matthew Cahill
+    void testT4p3() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        driver.findElement(By.id("startTimeBox_chzn")).click();
+        assertTrue(driver.getPageSource().contains("7:00am"));
+
+    }
+
+    @Test
+        // purpose: page 3, test T5
+        // input: user clicks on "ends before" option
+        // expected: user should be able to see the potential selection options for "ends before" meeting times for any class available
+        // Author: Matthew Cahill
+    void testT5p3() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        driver.findElement(By.id("endTimeBox_chzn")).click();
+        assertTrue(driver.getPageSource().contains("12:00pm"));
+    }
+
+    @Test
+        // purpose: page 3, test T6
+        // input: users clicks advanced search button
+        // expected: user should be able to choose specific semesters and instructors to specify search
+        // Author: Matthew Cahill
+    void testT6p3() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        driver.findElement(By.id("advancedButton")).click();
+        assertTrue(driver.getPageSource().contains("Instructor"));
+    }
+
+    @Test
+        // purpose: page 3, test T7
+        // input: user clicks on semester select
+        // expected: user is able to choose their specific semester that they would like to take the given class in
+        // Author: Matthew Cahill
+    void testT7p3() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        driver.findElement(By.id("advancedButton")).click();
+        driver.findElement(By.id("semesterSelect_chzn")).click();
+        assertTrue(driver.getPageSource().contains("Spring 2024"));
+    }
+
+    @Test
+        // purpose: page 3, test T8
+        // input: user enters specified instructor name
+        // expected: user is able to find all the sections that the instructor will teach
+        // Author: Matthew Cahill
+    void testT8p3() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        String instructor = "Peter Norton";
+        driver.findElement(By.id("advancedButton")).click();
+        driver.findElement(By.id("instructorBox")).click();
+        driver.findElement(By.id("instructorBox")).sendKeys(instructor);
+        driver.findElement(By.className("wrapForToolTip")).click();
+        assertTrue(driver.getPageSource().contains("Peter Norton"));
+    }
+
+    @Test
+        // purpose: page 3, test T9
+        // input: user hides the advanced search option after using it
+        // expected: user should not be able to use the advanced search features after this action
+        // Author: Matthew Cahill
+    void testT9p3() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        driver.findElement(By.id("advancedButton")).click();
+        driver.findElement(By.id("advancedButton")).click();
+        assertTrue(driver.getPageSource().contains("Instructor"));
+    }
+
+    @Test
+        // purpose: page 3, test T10
+        // input: user gives the advanced search bar an input of null
+        // expected: user should not be able to search any class sections to choose from in the given situation
+        // Author: Matthew Cahill
+    void testT10p3() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("browseToggleBtn")).click();
+        String instructor = "";
+        driver.findElement(By.id("advancedButton")).click();
+        driver.findElement(By.id("instructorBox")).click();
+        driver.findElement(By.id("instructorBox")).sendKeys(instructor);
+        driver.findElement(By.className("wrapForToolTip")).click();
+        assertFalse(driver.getPageSource().contains("Peter Norton"));
+    }
+
+    @Test
+        // purpose: page 4, test T1
+        // input: user clicks on name setting in profile page
+        // expected: user should be directed to page where they can enter and save their name
+        // Author: Matthew Cahill
+    void testT1p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("nameSetting")).click();
+        assertTrue(driver.getPageSource().contains("Set your name"));
+    }
+
+    @Test
+        // purpose: page 4, test T2
+        // input: user clicks on picture setting in profile page
+        // expected: user should be directed to page where they can upload a profile picture
+        // Author: Matthew Cahill
+    void testT2p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("pictureSetting")).click();
+        assertTrue(driver.getPageSource().contains("Upload Photo"));
+    }
+
+    @Test
+        // purpose: page 4, test T3
+        // input: user clicks on school setting in profile page
+        // expected: user should be directed to page where they can select their collegiate institution
+        // Author: Matthew Cahill
+    void testT3p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("schoolSetting")).click();
+        assertTrue(driver.getPageSource().contains("Set Your School"));
+    }
+
+    @Test
+        // purpose: page 4, test T4
+        // input: user clicks on year setting in profile page
+        // expected: user should be directed to page where they can select their year in college
+        // Author: Matthew Cahill
+    void testT4p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("yearSetting")).click();
+        assertTrue(driver.getPageSource().contains("Set Your Year"));
+    }
+
+    @Test
+        // purpose: page 4, test T5
+        // input: user clicks on major setting in profile page
+        // expected: user should be directed to page where they can select their course of study (college major)
+        // Author: Matthew Cahill
+    void testT5p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("majorSetting")).click();
+        assertTrue(driver.getPageSource().contains("Set Your Major"));
+    }
+
+    @Test
+        // purpose: page 4, test T6
+        // input: user clicks on socials setting in profile page
+        // expected: user should be directed to page where they can enter various social media handles they have
+        // Author: Matthew Cahill
+    void testT6p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("socialsSetting")).click();
+        assertTrue(driver.getPageSource().contains("Socials"));
+    }
+
+    @Test
+        // purpose: page 4, test T7
+        // input: user clicks on class status changes toggle button
+        // expected: user should be able to turn off class status changes notifications
+        // Author: Matthew Cahill
+    void testT7p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("notificationsSetting")).click();
+        driver.findElement(By.className("notifModSwitch")).click();
+        assertTrue(driver.getPageSource().contains("Class Status Changes"));
+    }
+
+    @Test
+        // purpose: page 4, test T8
+        // input: user clicks on "all" in the chat notifications section
+        // expected: user switches from the automatically selected "dynamic" option to the "all" option
+        // Author: Matthew Cahill
+    void testT8p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("notificationsSetting")).click();
+        driver.findElement(By.className("chatNotificationOptionContainer")).click();
+        assertTrue(driver.getPageSource().contains("All"));
+    }
+
+    @Test
+        // purpose: page 4, test T9
+        // input: user clicks on pair setting in profile page
+        // expected: user should be directed to page where there is an explanation of how to link desktop account with mobile device account
+        // Author: Matthew Cahill
+    void testT9p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("pairSetting")).click();
+        assertTrue(driver.getPageSource().contains("Enter your code"));
+    }
+
+    @Test
+        // purpose: page 4, test T10
+        // input: user clicks on support setting in profile page
+        // expected: user should be directed to page where they are given the opportunity to create a support request
+        // Author: Matthew Cahill
+    void testT10p4() {
+        pageBackHalfSetUp();
+        driver.findElement(By.id("loggedInContainer")).click();
+        driver.findElement(By.id("supportSetting")).click();
+        assertTrue(driver.getPageSource().contains("Contact Us"));
     }
 }
